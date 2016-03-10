@@ -9,7 +9,7 @@ def displayPlot(data, systolic, diastolic):
     listDates = []
     for time in data:
         listDates.append(datetime.datetime.fromtimestamp(float(time)))
-
+    
     plt.gca().xaxis.set_major_formatter(matplotlib.dates.DateFormatter('%m/%d/%y'))
     plt.gca().xaxis.set_major_locator(matplotlib.dates.DayLocator())
     plt.plot(listDates, systolic, 'r')
@@ -68,11 +68,19 @@ def main():
             reader = csv.reader(fileIO())
             data = []
             for row in reader:
-                data.append(row[0])
+                data.append(row)
+            
+            #print data[1][5]
+            systolic = []
+            diastolic = []
+            dates = []
+            for row in data[1:]:
+                systolic.append(row[5][:row[5].index('/')])
+                diastolic.append(row[5][row[5].index('/')+1:])
+                dates.append(row[0])
 
-            systolic = [118, 129, 113, 136, 125, 136]
-            diastolic = [75, 77, 69, 84, 81, 80]
-            displayPlot(data[1:], systolic, diastolic)
+            
+            displayPlot(dates, systolic, diastolic)
 
 
 if __name__ == '__main__':
